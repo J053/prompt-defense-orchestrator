@@ -375,118 +375,250 @@ def generar_figura_3_entornos_docker(out_dirs):
 
 
 def generar_figura_5_erd(out_dirs):
-    """Figura 5: Diagrama entidad-relación del almacén de procedencia de datos y telemetría forense."""
-    fig, ax = plt.subplots(figsize=(13, 7), dpi=300)
+    """Figura 5: Diagrama entidad-relación (ERD) del almacén de procedencia de datos y telemetría forense."""
+    fig, ax = plt.subplots(figsize=(15.5, 9.2), dpi=300)
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.axis('off')
 
-    def dibujar_tabla_erd(x, y, w, h, titulo, atributos, color_header="#1E3A8A"):
+    fig.patch.set_facecolor('#FFFFFF')
+
+    # Títulos normativos APA 7
+    ax.text(50, 97.5, "Figura 5: Modelo Entidad-Relación (ERD) del Almacén de Procedencia de Datos y Telemetría Forense", 
+            fontweight='bold', fontsize=12.5, ha='center', va='center', color="#0F172A")
+    ax.text(50, 95.0, "Esquema relacional en Tercera Forma Normal (3NF) con trazabilidad de proveniencia W3C PROV-DM y telemetría de ejecución", 
+            fontsize=8.5, fontstyle='italic', ha='center', va='center', color="#475569")
+
+    def dibujar_tabla_erd(x, y, w, h, titulo, subtitulo, atributos, color_header="#1E3A8A"):
+        # Sombra sutil
+        shadow = patches.FancyBboxPatch((x + 0.3, y - 0.3), w, h,
+                                        boxstyle="square,pad=0",
+                                        facecolor="#000000", alpha=0.06, edgecolor="none")
+        ax.add_patch(shadow)
+
+        # Cuerpo completo
+        cuerpo = patches.Rectangle((x, y), w, h, facecolor="#FFFFFF", edgecolor="#334155", linewidth=1.2)
+        ax.add_patch(cuerpo)
+
         # Encabezado
-        header = patches.Rectangle((x, y + h - 6), w, 6, facecolor=color_header, edgecolor="#0F172A", linewidth=1.2)
+        header_h = 5.4
+        header = patches.Rectangle((x, y + h - header_h), w, header_h, 
+                                   facecolor=color_header, edgecolor="#334155", linewidth=1.2)
         ax.add_patch(header)
-        ax.text(x + w/2.0, y + h - 3.8, titulo, color="white", fontweight='bold', fontsize=8.5, ha='center', va='center')
-        
-        # Cuerpo
-        body = patches.Rectangle((x, y), w, h - 6, facecolor="#F8FAFC", edgecolor="#0F172A", linewidth=1.2)
-        ax.add_patch(body)
-        
-        curr_y = y + h - 9
-        for attr in atributos:
-            is_pk = "PK" in attr
-            is_fk = "FK" in attr
-            font_w = 'bold' if (is_pk or is_fk) else 'normal'
-            color_txt = '#991B1B' if is_pk else ('#0369A1' if is_fk else '#1E293B')
-            ax.text(x + 1.2, curr_y, attr, fontsize=7.5, color=color_txt, fontweight=font_w, va='center', fontfamily="monospace")
-            curr_y -= 3.2
 
-    # Tablas
-    dibujar_tabla_erd(4, 60, 26, 32, "AUDIT_SESSION", [
-        "session_id : VARCHAR(36) [PK]",
-        "target_app : VARCHAR(50)",
-        "start_time : TIMESTAMP",
-        "end_time : TIMESTAMP",
-        "defense_mode : BOOLEAN",
-        "operator_id : VARCHAR(50)",
-        "container_id : VARCHAR(64)",
-        "reset_status : VARCHAR(20)"
-    ])
+        # Texto del Encabezado
+        ax.text(x + w/2.0, y + h - 2.2, titulo, color="white", fontweight='bold', 
+                fontsize=8.8, ha='center', va='center', fontfamily='sans-serif')
+        ax.text(x + w/2.0, y + h - 4.1, subtitulo, color="#E2E8F0", 
+                fontsize=6.8, ha='center', va='center', fontfamily='sans-serif')
 
-    dibujar_tabla_erd(37, 60, 26, 32, "TEST_CASE_BENCHMARK", [
-        "payload_id : VARCHAR(36) [PK]",
-        "session_id : VARCHAR(36) [FK]",
-        "source_corpus : VARCHAR(30)",
-        "attack_type : VARCHAR(40)",
-        "user_directive : TEXT",
-        "injected_content : TEXT",
-        "expected_tool : VARCHAR(50)",
-        "malicious_tool : VARCHAR(50)"
-    ], color_header="#0D9488")
+        # Línea divisoria bajo el encabezado
+        ax.plot([x, x + w], [y + h - header_h, y + h - header_h], color="#1E293B", lw=1.0)
 
-    dibujar_tabla_erd(70, 60, 26, 32, "PROVENANCE_EVENT", [
-        "event_id : VARCHAR(36) [PK]",
-        "payload_id : VARCHAR(36) [FK]",
-        "raw_token : TEXT",
-        "sanitized_token : TEXT",
-        "taint_tag : VARCHAR(30)",
-        "source_origin : VARCHAR(50)",
-        "intercept_time : TIMESTAMP",
-        "policy_rule : VARCHAR(50)"
+        # Render de atributos (Estilo DataGrip / Workbench)
+        curr_y = y + h - header_h - 2.2
+        step_y = 3.05
+
+        for i, (key_type, col_name, data_type) in enumerate(atributos):
+            # Zebra striping suave para facilitar lectura
+            if i % 2 == 1:
+                stripe = patches.Rectangle((x + 0.2, curr_y - 1.2), w - 0.4, 2.7,
+                                           facecolor="#F8FAFC", edgecolor="none")
+                ax.add_patch(stripe)
+
+            # Badge PK / FK
+            if key_type == "PK":
+                ax.text(x + 1.2, curr_y, "[PK]", fontsize=7.2, color="#DC2626", fontweight='bold', 
+                        va='center', fontfamily="monospace")
+            elif key_type == "FK":
+                ax.text(x + 1.2, curr_y, "[FK]", fontsize=7.2, color="#0284C7", fontweight='bold', 
+                        va='center', fontfamily="monospace")
+            else:
+                ax.text(x + 1.6, curr_y, " • ", fontsize=7.0, color="#94A3B8", va='center')
+
+            # Nombre de Columna
+            is_key = key_type in ("PK", "FK")
+            font_w = 'bold' if is_key else 'normal'
+            col_color = "#0F172A" if is_key else "#334155"
+            ax.text(x + 4.5, curr_y, col_name, fontsize=7.4, color=col_color, 
+                    fontweight=font_w, va='center', fontfamily="monospace")
+
+            # Tipo de Dato (Alineado a la derecha)
+            ax.text(x + w - 1.2, curr_y, data_type, fontsize=6.8, color="#64748B", 
+                    ha='right', va='center', fontfamily="monospace")
+
+            curr_y -= step_y
+
+    # Ancho y alto estandarizados para perfecta simetría y espacio
+    w_box = 26.5
+    h_box = 36.5
+    y_top = 54.5
+    y_bottom = 9.5
+
+    x_left = 4.0
+    x_center = 36.75
+    x_right = 69.5
+
+    # TABLAS FILA SUPERIOR
+    dibujar_tabla_erd(x_left, y_top, w_box, h_box, 
+                      "AUDIT_SESSION", "Sesiones Maestras de Auditoría", [
+        ("PK", "session_id", "VARCHAR(36)"),
+        ("",   "target_app", "VARCHAR(50)"),
+        ("",   "start_time", "TIMESTAMP"),
+        ("",   "end_time", "TIMESTAMP"),
+        ("",   "defense_mode", "BOOLEAN"),
+        ("",   "operator_id", "VARCHAR(50)"),
+        ("",   "container_id", "VARCHAR(64)"),
+        ("",   "reset_status", "VARCHAR(20)"),
+    ], color_header="#1E3A8A")
+
+    dibujar_tabla_erd(x_center, y_top, w_box, h_box, 
+                      "TEST_CASE_BENCHMARK", "Casos de Prueba y Payloads", [
+        ("PK", "payload_id", "VARCHAR(36)"),
+        ("FK", "session_id", "VARCHAR(36)"),
+        ("",   "source_corpus", "VARCHAR(30)"),
+        ("",   "attack_type", "VARCHAR(40)"),
+        ("",   "user_directive", "TEXT"),
+        ("",   "injected_content", "TEXT"),
+        ("",   "expected_tool", "VARCHAR(50)"),
+        ("",   "malicious_tool", "VARCHAR(50)"),
+    ], color_header="#0F766E")
+
+    dibujar_tabla_erd(x_right, y_top, w_box, h_box, 
+                      "PROVENANCE_EVENT", "Trazabilidad de Proveniencia W3C", [
+        ("PK", "event_id", "VARCHAR(36)"),
+        ("FK", "payload_id", "VARCHAR(36)"),
+        ("",   "raw_token", "TEXT"),
+        ("",   "sanitized_token", "TEXT"),
+        ("",   "taint_tag", "VARCHAR(30)"),
+        ("",   "source_origin", "VARCHAR(50)"),
+        ("",   "intercept_time", "TIMESTAMP"),
+        ("",   "policy_rule", "VARCHAR(50)"),
     ], color_header="#B45309")
 
-    dibujar_tabla_erd(4, 12, 26, 34, "EXECUTION_TRACE", [
-        "trace_id : VARCHAR(36) [PK]",
-        "payload_id : VARCHAR(36) [FK]",
-        "invoked_tool : VARCHAR(50)",
-        "param_origin : VARCHAR(30)",
-        "action_verdict : VARCHAR(20)",
-        "exception_raised : VARCHAR(80)",
-        "latency_ms : DECIMAL(8,2)",
-        "token_cost_usd : DECIMAL(10,6)",
-        "asr_outcome : INT(1)",
-        "eds_score : DECIMAL(6,4)"
-    ], color_header="#4338CA")
+    # TABLAS FILA INFERIOR
+    dibujar_tabla_erd(x_left, y_bottom, w_box, h_box, 
+                      "CVSS_FINDING_REPORT", "Dictámenes Forenses CVSS v3.1", [
+        ("PK", "report_id", "VARCHAR(36)"),
+        ("FK", "session_id", "VARCHAR(36)"),
+        ("FK", "payload_id", "VARCHAR(36)"),
+        ("",   "cwe_identifier", "VARCHAR(30)"),
+        ("",   "cvss_v31_score", "DECIMAL(3,1)"),
+        ("",   "severity_level", "VARCHAR(20)"),
+        ("",   "vector_string", "VARCHAR(60)"),
+        ("",   "exploit_confirmed", "BOOLEAN"),
+        ("",   "json_report_path", "TEXT"),
+    ], color_header="#991B1B")
 
-    dibujar_tabla_erd(37, 12, 26, 34, "AUTHGRAPH_NODE", [
-        "node_id : VARCHAR(36) [PK]",
-        "event_id : VARCHAR(36) [FK]",
-        "graph_layer : INT",
-        "clean_ag_hash : VARCHAR(64)",
-        "reasoning_irg_hash : VARCHAR(64)",
-        "alignment_score : DECIMAL(4,2)",
-        "pointer_layer : VARCHAR(30)",
-        "deviation_flag : BOOLEAN"
-    ], color_header="#6D28D9")
+    dibujar_tabla_erd(x_center, y_bottom, w_box, h_box, 
+                      "EXECUTION_TRACE", "Telemetría de Ejecución Runtime", [
+        ("PK", "trace_id", "VARCHAR(36)"),
+        ("FK", "payload_id", "VARCHAR(36)"),
+        ("",   "invoked_tool", "VARCHAR(50)"),
+        ("",   "param_origin", "VARCHAR(30)"),
+        ("",   "action_verdict", "VARCHAR(20)"),
+        ("",   "exception_raised", "VARCHAR(80)"),
+        ("",   "latency_ms", "DECIMAL(8,2)"),
+        ("",   "token_cost_usd", "DECIMAL(10,6)"),
+        ("",   "asr_outcome", "INT(1)"),
+        ("",   "eds_score", "DECIMAL(6,4)"),
+    ], color_header="#3730A3")
 
-    dibujar_tabla_erd(70, 12, 26, 34, "CVSS_FINDING_REPORT", [
-        "report_id : VARCHAR(36) [PK]",
-        "session_id : VARCHAR(36) [FK]",
-        "payload_id : VARCHAR(36) [FK]",
-        "cwe_identifier : VARCHAR(30)",
-        "cvss_v31_score : DECIMAL(3,1)",
-        "severity_level : VARCHAR(20)",
-        "vector_string : VARCHAR(60)",
-        "exploit_confirmed : BOOLEAN",
-        "json_report_path : TEXT"
-    ], color_header="#BE123C")
+    dibujar_tabla_erd(x_right, y_bottom, w_box, h_box, 
+                      "AUTHGRAPH_NODE", "Nodos del Grafo de Alineación", [
+        ("PK", "node_id", "VARCHAR(36)"),
+        ("FK", "event_id", "VARCHAR(36)"),
+        ("",   "graph_layer", "INT"),
+        ("",   "clean_ag_hash", "VARCHAR(64)"),
+        ("",   "reasoning_irg_hash", "VARCHAR(64)"),
+        ("",   "alignment_score", "DECIMAL(4,2)"),
+        ("",   "pointer_layer", "VARCHAR(30)"),
+        ("",   "deviation_flag", "BOOLEAN"),
+    ], color_header="#6B21A8")
 
-    # Relaciones (Líneas con conectores)
-    def conector(x1, y1, x2, y2, label="1:N"):
-        ax.annotate('', xy=(x2, y2), xytext=(x1, y1),
-                    arrowprops=dict(arrowstyle="->", color="#1E293B", lw=1.5))
-        ax.text((x1 + x2)/2.0, (y1 + y2)/2.0 + 1.2, label, fontsize=7.5, color="#1E293B", fontweight='bold', ha='center')
+    # CONECTORES RELACIONALES CON CORTE DE LÍNEA Y BADGE LIMPIO
+    def conector_horizontal(x1, x2, y, label="1 : N"):
+        mid_x = (x1 + x2) / 2.0
+        bw = 3.6
+        if x1 < x2:
+            ax.plot([x1, mid_x - bw/2.0], [y, y], color="#334155", lw=1.5)
+            ax.annotate('', xy=(x2, y), xytext=(mid_x + bw/2.0, y),
+                        arrowprops=dict(arrowstyle="-|>", color="#1E293B", lw=1.5, mutation_scale=12))
+        else:
+            ax.plot([x1, mid_x + bw/2.0], [y, y], color="#334155", lw=1.5)
+            ax.annotate('', xy=(x2, y), xytext=(mid_x - bw/2.0, y),
+                        arrowprops=dict(arrowstyle="-|>", color="#1E293B", lw=1.5, mutation_scale=12))
 
-    conector(30, 76, 37, 76, "1 : N")
-    conector(63, 76, 70, 76, "1 : N")
-    conector(50, 60, 50, 46, "1 : N")
-    conector(50, 46, 30, 28, "1 : 1")
-    conector(83, 60, 83, 46, "1 : 1")
-    conector(22, 60, 22, 50)
-    ax.plot([22, 70], [50, 50], color="#1E293B", lw=1.5)
-    ax.plot([70, 70], [50, 46], color="#1E293B", lw=1.5)
+        badge = patches.FancyBboxPatch((mid_x - bw/2.0, y - 1.1), bw, 2.2,
+                                       boxstyle="round,pad=0.2",
+                                       facecolor="#F8FAFC", edgecolor="#64748B", lw=1.0)
+        ax.add_patch(badge)
+        ax.text(mid_x, y, label, fontsize=7.2, color="#0F172A", 
+                fontweight='bold', ha='center', va='center')
 
-    ax.set_title("Figura 5: Modelo Entidad-Relación (ERD) del Almacén de Procedencia de Datos y Telemetría Forense", 
-                 fontweight='bold', fontsize=11, pad=15)
+    def conector_vertical(x, y1, y2, label="1 : N"):
+        mid_y = (y1 + y2) / 2.0
+        bh = 2.2
+        ax.plot([x, x], [y1, mid_y + bh/2.0], color="#334155", lw=1.5)
+        ax.annotate('', xy=(x, y2), xytext=(x, mid_y - bh/2.0),
+                    arrowprops=dict(arrowstyle="-|>", color="#1E293B", lw=1.5, mutation_scale=12))
+
+        bw = 3.6
+        badge = patches.FancyBboxPatch((x - bw/2.0, mid_y - bh/2.0), bw, bh,
+                                       boxstyle="round,pad=0.2",
+                                       facecolor="#F8FAFC", edgecolor="#64748B", lw=1.0)
+        ax.add_patch(badge)
+        ax.text(x, mid_y, label, fontsize=7.2, color="#0F172A", 
+                fontweight='bold', ha='center', va='center')
+
+    # 1. AUDIT_SESSION -> TEST_CASE_BENCHMARK (Horizontal Derecha)
+    y_h_top = y_top + h_box/2.0
+    conector_horizontal(x_left + w_box, x_center, y_h_top, "1 : N")
+
+    # 2. TEST_CASE_BENCHMARK -> PROVENANCE_EVENT (Horizontal Derecha)
+    conector_horizontal(x_center + w_box, x_right, y_h_top, "1 : N")
+
+    # 3. PROVENANCE_EVENT -> AUTHGRAPH_NODE (Vertical Abajo)
+    x_c_right = x_right + w_box/2.0
+    conector_vertical(x_c_right, y_top, y_bottom + h_box, "1 : 1")
+
+    # 4. AUTHGRAPH_NODE -> EXECUTION_TRACE (Horizontal Izquierda)
+    y_h_bottom = y_bottom + h_box/2.0
+    conector_horizontal(x_right, x_center + w_box, y_h_bottom, "1 : 1")
+
+    # 5. EXECUTION_TRACE -> CVSS_FINDING_REPORT (Horizontal Izquierda)
+    conector_horizontal(x_center, x_left + w_box, y_h_bottom, "1 : 1")
+
+    # 6. AUDIT_SESSION -> CVSS_FINDING_REPORT (Vertical Abajo)
+    x_c_left = x_left + w_box/2.0
+    conector_vertical(x_c_left, y_top, y_bottom + h_box, "1 : N")
+
+    # 7. TEST_CASE_BENCHMARK -> EXECUTION_TRACE (Vertical Abajo)
+    x_c_center = x_center + w_box/2.0
+    conector_vertical(x_c_center, y_top, y_bottom + h_box, "1 : 1")
+
+    # PIE DE DIAGRAMA: LEYENDA TÉCNICA ESTRUCTURADA
+    leg_box = patches.FancyBboxPatch((4.0, 1.4), 92.0, 4.4,
+                                     boxstyle="round,pad=0.2",
+                                     facecolor="#F8FAFC", edgecolor="#CBD5E1", lw=1.1)
+    ax.add_patch(leg_box)
+
+    # 4 columnas perfectamente distribuidas
+    # Col 1: PK
+    ax.text(5.5, 3.6, "[PK]", fontsize=7.2, fontweight='bold', color="#DC2626", va='center', fontfamily="monospace")
+    ax.text(8.2, 3.6, "Clave Primaria (Identificador único)", fontsize=7.1, color="#1E293B", va='center')
+
+    # Col 2: FK
+    ax.text(28.5, 3.6, "[FK]", fontsize=7.2, fontweight='bold', color="#0284C7", va='center', fontfamily="monospace")
+    ax.text(31.2, 3.6, "Clave Foránea (Integridad referencial)", fontsize=7.1, color="#1E293B", va='center')
+
+    # Col 3: Cardinalidad
+    ax.text(51.5, 3.6, "1:N / 1:1", fontsize=7.2, fontweight='bold', color="#0F172A", va='center', fontfamily="monospace")
+    ax.text(57.5, 3.6, "Cardinalidad relacional", fontsize=7.1, color="#1E293B", va='center')
+
+    # Col 4: Estándares
+    ax.text(94.5, 3.6, "Estándares: W3C PROV-DM & NIST SP 800-86", fontsize=7.1, fontstyle='italic', 
+            fontweight='bold', color="#475569", ha='right', va='center')
 
     plt.tight_layout()
     for d in out_dirs:
