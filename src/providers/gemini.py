@@ -4,13 +4,20 @@ Proveedor Gemini API oficial utilizando el SDK moderno google-genai.
 import os
 import asyncio
 from typing import Dict, Any, Optional
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from src.providers.base import LLMProviderStrategy
 
 
 class GeminiProvider(LLMProviderStrategy):
-    """Integración con Google Gemini Developer API y Vertex AI usando google-genai."""
+    """Integración con Google Gemini Developer API usando google-genai."""
 
-    def __init__(self, api_key: Optional[str] = None, model_name: str = "gemini-2.5-flash"):
+    def __init__(self, api_key: Optional[str] = None, model_name: str = "gemini-3.5-flash-lite"):
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
         self.model_name = model_name
         self.client = None

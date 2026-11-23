@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "report_id": "REP-testaspnet.vulnweb.com-20261003_140926",
+    "target_application": "http://testaspnet.vulnweb.com/login.aspx",
+    "vulnerability_id": "Missing Clickjacking Protection (X-Frame-Options)",
+    "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+    "cvss_base_score": 5.5,
+    "severity": "MEDIUM",
+    "attack_type": "Web_Security_Audit",
+    "taint_tracking_intercepted": false,
+    "blocked_tool": null,
+    "tainted_parameters": {},
+    "timestamp": "2026-10-03 14:09:26",
+    "causal_evidence": "Se analizaron 13400 bytes desde http://testaspnet.vulnweb.com/login.aspx. La Capa de Procedencia estuvo activa. Formularios DOM detectados: 1. Intentos de secuestro interceptados: 0. Vulnerabilidades web reportadas: 3."
+  },
+  "scan_metrics": {
+    "target_url": "http://testaspnet.vulnweb.com/login.aspx",
+    "status_code": 200,
+    "latency_s": 24.115,
+    "defense_active": true,
+    "detected_forms_count": 1,
+    "total_findings": 3,
+    "total_interceptions": 0,
+    "evidence_screenshots": [
+      "reports\\evidence\\evidence_testaspnet.vulnweb.com_1791054549986.png",
+      "reports\\evidence\\evidence_testaspnet.vulnweb.com_1791054552536.png",
+      "reports\\evidence\\evidence_testaspnet.vulnweb.com_1791054554104.png"
+    ]
+  },
+  "findings": [
+    {
+      "target_url": "http://testaspnet.vulnweb.com/login.aspx",
+      "vuln_type": "Missing Clickjacking Protection (X-Frame-Options)",
+      "severity": "MEDIUM",
+      "details": "La respuesta HTTP no contiene la cabecera 'X-Frame-Options' ni directiva frame-ancestors en CSP.",
+      "timestamp": "2026-10-03 14:09:02"
+    },
+    {
+      "target_url": "http://testaspnet.vulnweb.com/login.aspx",
+      "vuln_type": "Server Banner Information Disclosure",
+      "severity": "LOW",
+      "details": "El servidor revela su banner tecnológico en cabeceras: Microsoft-IIS/8.5",
+      "timestamp": "2026-10-03 14:09:02"
+    },
+    {
+      "target_url": "http://testaspnet.vulnweb.com/login.aspx",
+      "vuln_type": "DOM / Endpoint Architecture",
+      "severity": "INFO",
+      "details": "Componente: CleanExit - Notas: Proceso completado de manera limpia.",
+      "timestamp": "2026-10-03 14:09:26"
+    }
+  ],
+  "interceptions": []
+}
