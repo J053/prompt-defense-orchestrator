@@ -1,6 +1,12 @@
-﻿venv/
+venv/
+.venv/
 __pycache__/
 *.pyc
 .env
-out/*.csv
+.env.*
+out/
 .pytest_cache/
+*.log
+.vscode/
+.idea/
+Thumbs.db
