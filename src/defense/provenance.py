@@ -65,6 +65,7 @@ class ParamPolicyValidator:
         "execute_command",
         "send_email",
         "write_file",
+        "file_write",
         "exfiltrate_data",
         "drop_database",
         "modify_privileges",
@@ -78,7 +79,13 @@ class ParamPolicyValidator:
         "parse_headers",
         "calculate_cvss",
         "log_evidence",
-        "inspect_forms"
+        "inspect_forms",
+        "report_vulnerability",
+        "record_observation",
+        "detect_sqli",
+        "check_xss",
+        "test_csrf",
+        "detect_rce"
     }
 
     @classmethod
@@ -88,6 +95,9 @@ class ParamPolicyValidator:
         Si la defensa está activa y una herramienta privilegiada recibe parámetros contaminados,
         aborta la ejecución y bloquea el secuestro del agente.
         """
+        if tool_name not in cls.SENSITIVE_TOOLS | cls.BENIGN_TOOLS:
+            raise ParamPolicyBlockedException(tool_name, "*", "Herramienta no registrada")
+
         if not is_defense_active:
             # Modo Ablación (Defensa OFF): Permite la ejecución, permitiendo que el payload secuestre la herramienta
             return True, "ALLOWED_ABLATION"
@@ -102,7 +112,7 @@ class ParamPolicyValidator:
 
 
 class DualGraphAlignment:
-    """Modelo de alineación de grafos duales (AuthGraph) para validar el flujo de razonamiento del agente."""
+    """Comprobación de pertenencia de herramientas; no valida aristas ni orden causal."""
 
     @staticmethod
     def verify_alignment(injected_reasoning_graph: List[str], authorization_graph: List[str]) -> Tuple[bool, float]:

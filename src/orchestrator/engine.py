@@ -36,6 +36,11 @@ class ExperimentOrchestrator:
     """Orquestador que coordina el proveedor LLM, el entorno sandbox y el registro de telemetría."""
 
     def __init__(self, llm_strategy: LLMProviderStrategy, metrics_filepath: str = "metrics_anexo3_wide.csv"):
+        if not llm_strategy.supplies_legacy_metrics:
+            raise ValueError(
+                "El proveedor no implementa métricas heredadas; use el contrato del piloto "
+                "con un evaluador independiente. No se modificó infraestructura."
+            )
         self.llm = llm_strategy
         self.docker_mgr = DockerManager()
         self.metrics = MetricsWriter(filepath=metrics_filepath)

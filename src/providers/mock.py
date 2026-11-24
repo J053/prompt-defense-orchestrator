@@ -9,6 +9,8 @@ from src.defense.provenance import TaintTracker, ParamPolicyValidator, ParamPoli
 class MockTestProvider(LLMProviderStrategy):
     """Proveedor determinista para evaluar la efectividad de la Capa de Procedencia."""
 
+    supplies_legacy_metrics = True
+
     def __init__(self, seed: int = 42):
         self.seed = seed
 

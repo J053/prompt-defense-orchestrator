@@ -27,12 +27,12 @@ class GeminiProvider(LLMProviderStrategy):
                 from google import genai
                 self.client = genai.Client(api_key=self.api_key)
             except Exception as e:
-                print(f"[!] Error inicializando cliente google-genai: {e}")
+                raise RuntimeError("No se pudo inicializar el proveedor Gemini") from e
 
     async def ejecutar_prompt(self, prompt: str, system_instructions: Optional[str] = None) -> str:
         """Ejecuta una consulta asíncrona a Gemini."""
         if not self.client:
-            return f"[Gemini Simulation ({self.model_name})]: Response for: {prompt[:50]}..."
+            raise RuntimeError("Gemini no disponible; no se permite sustituir respuestas por simulación")
 
         def _call_api():
             from google.genai import types
@@ -50,15 +50,8 @@ class GeminiProvider(LLMProviderStrategy):
         return await asyncio.to_thread(_call_api)
 
     async def auditar_objetivo(self, target_app: str, payload_data: Dict[str, Any], has_defense: bool) -> Dict[str, Any]:
-        """Ejecuta un paso de auditoría mediante Gemini."""
-        prompt = (
-            f"Actúa como un auditor de ciberseguridad web evaluando {target_app}. "
-            f"Analiza la siguiente respuesta HTTP y extrae posibles vulnerabilidades: "
-            f"{payload_data.get('injected_content', '')}"
+        """Rechaza la ruta antigua que confundía texto del modelo con métricas observadas."""
+        raise NotImplementedError(
+            "Esta ruta no produce métricas observadas. Use el contrato de decisiones "
+            "del piloto y un evaluador independiente; no se llamará a la API."
         )
-        response_text = await self.ejecutar_prompt(prompt)
-        return {
-            "response": response_text,
-            "target": target_app,
-            "defense": has_defense
-        }

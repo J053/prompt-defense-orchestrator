@@ -8,6 +8,8 @@ from typing import Dict, Any, Optional
 class LLMProviderStrategy(ABC):
     """Interfaz abstracta que define la ejecución de prompts y llamadas a herramientas."""
 
+    supplies_legacy_metrics = False
+
     @abstractmethod
     async def ejecutar_prompt(self, prompt: str, system_instructions: Optional[str] = None) -> str:
         """Envía el prompt al modelo y retorna la respuesta de texto."""

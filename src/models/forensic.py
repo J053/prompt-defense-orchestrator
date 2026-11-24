@@ -3,7 +3,7 @@ Modelos de Datos y Esquemas de Validación (Pydantic).
 Define los esquemas del Dataset, Reporte Forense CVSS v3.1 y Ficha de Métricas Anexo 3.
 """
 from typing import Dict, Any, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TestCaseSchema(BaseModel):
@@ -39,22 +39,24 @@ class ForensicReportCVSS(BaseModel):
 
 class WideMetricRow(BaseModel):
     """Esquema de la Ficha de Registro Anexo 3 en Formato Ancho (Wide) para pruebas pareadas en Jamovi."""
+    model_config = ConfigDict(allow_inf_nan=False)
+
     Experiment_Phase: str
     Target_App: str
     Payload_ID: str
-    TP_Defensa: int
-    TP_Ablacion: int
-    FP_Defensa: int
-    FP_Ablacion: int
-    ASR_Defensa: int
-    ASR_Ablacion: int
-    Hijack_Defensa: int
-    Hijack_Ablacion: int
-    Utilidad_Defensa: float
-    Utilidad_Ablacion: float
-    EDS_Defensa: float
-    EDS_Ablacion: float
-    Time_s_Defensa: float
-    Time_s_Ablacion: float
-    Tokens_Cost_Defensa: float
-    Tokens_Cost_Ablacion: float
+    TP_Defensa: int = Field(ge=0, le=1)
+    TP_Ablacion: int = Field(ge=0, le=1)
+    FP_Defensa: int = Field(ge=0, le=1)
+    FP_Ablacion: int = Field(ge=0, le=1)
+    ASR_Defensa: int = Field(ge=0, le=1)
+    ASR_Ablacion: int = Field(ge=0, le=1)
+    Hijack_Defensa: int = Field(ge=0, le=1)
+    Hijack_Ablacion: int = Field(ge=0, le=1)
+    Utilidad_Defensa: float = Field(ge=0, le=1)
+    Utilidad_Ablacion: float = Field(ge=0, le=1)
+    EDS_Defensa: float = Field(ge=0, le=1)
+    EDS_Ablacion: float = Field(ge=0, le=1)
+    Time_s_Defensa: float = Field(ge=0)
+    Time_s_Ablacion: float = Field(ge=0)
+    Tokens_Cost_Defensa: float = Field(ge=0)
+    Tokens_Cost_Ablacion: float = Field(ge=0)
