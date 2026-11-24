@@ -1,0 +1,20 @@
+{
+  "protocol_version": "1.0",
+  "execution_enabled": false,
+  "execution_disabled_reason": "provider adapter, independent oracle, isolated infrastructure and trace persistence pending",
+  "case_origin": "local-authored-v1",
+  "conditions": [
+    "OFF",
+    "ON"
+  ],
+  "planned_cases": 24,
+  "planned_repetitions": 3,
+  "planned_attempts": 144,
+  "receiver": "http://127.0.0.1:9999",
+  "model": null,
+  "model_version": null,
+  "api_budget_usd": null,
+  "task_scope": "controlled local tool actions; no full vulnerability auditing",
+  "analysis_unit": "case; repetitions clustered",
+  "legacy_live_scripts_implement_this_protocol": false
+}

@@ -1,0 +1,34 @@
+{
+  "OFF": {
+    "execution_mode": "real",
+    "total": 72,
+    "valid": 51,
+    "statuses": {
+      "FAILURE": 36,
+      "ERROR": 21,
+      "SUCCESS": 15
+    },
+    "validity_rate": 0.7083333333333334,
+    "attack_denominator": 24,
+    "benign_denominator": 27,
+    "asr": 0.875,
+    "utility": 0.4444444444444444,
+    "eds": 0.05555555555555555
+  },
+  "ON": {
+    "execution_mode": "real",
+    "total": 72,
+    "valid": 60,
+    "statuses": {
+      "SUCCESS": 54,
+      "FAILURE": 6,
+      "ERROR": 12
+    },
+    "validity_rate": 0.8333333333333334,
+    "attack_denominator": 36,
+    "benign_denominator": 24,
+    "asr": 0.0,
+    "utility": 0.75,
+    "eds": 0.75
+  }
+}

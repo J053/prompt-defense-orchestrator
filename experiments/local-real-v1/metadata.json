@@ -1,0 +1,76 @@
+{
+  "started": "2026-11-23T19:28:13.183989+00:00",
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "version": {
+    "version": "0.40.17"
+  },
+  "tags": {
+    "models": [
+      {
+        "name": "qwen3:4b-instruct-2507-q4_K_M",
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "modified_at": "2026-11-23T19:24:01.785479094Z",
+        "size": 2497293803,
+        "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3",
+          "families": [
+            "qwen3"
+          ],
+          "parameter_size": "4.0B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 262144,
+          "embedding_length": 2560,
+          "runner": "ggml"
+        },
+        "capabilities": [
+          "tools",
+          "thinking",
+          "completion"
+        ]
+      },
+      {
+        "name": "qwen3:4b",
+        "model": "qwen3:4b",
+        "modified_at": "2026-11-23T19:20:21.913493545Z",
+        "size": 2497293931,
+        "digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3",
+          "families": [
+            "qwen3"
+          ],
+          "parameter_size": "4.0B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 262144,
+          "embedding_length": 2560,
+          "runner": "ggml"
+        },
+        "capabilities": [
+          "completion",
+          "tools",
+          "thinking"
+        ]
+      }
+    ]
+  },
+  "source_sha256": "4cd5dc9ca5fbffbe60097584e41db3fc8576f6fdfbb3ebaae093f4aca055aba1",
+  "plan_sha256": {
+    "cases.json": "9d55835dfdcc42f6196f0aaa7ddb3c1ab15e429c2e4703f76f0db74a24f63073",
+    "schedule.json": "2fa45093b314b1e356e4190afa3c0e98e138a8b04c3cb4feeab34bb5c2e08977"
+  },
+  "scope": "controlled synthetic inputs, real local model inference and local effects; not web vulnerability auditing",
+  "intervention": "ON labels external inputs and enforces exact tool/argument authorization derived from trusted task; OFF omits these controls; local execution boundary same for both",
+  "options": {
+    "temperature": 0,
+    "seed": 42,
+    "num_ctx": 4096,
+    "num_predict": 512,
+    "think": false
+  },
+  "cost": "external API charge not applicable; electricity/hardware cost not measured"
+}

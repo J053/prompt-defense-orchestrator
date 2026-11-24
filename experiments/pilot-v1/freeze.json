@@ -1,0 +1,15 @@
+{
+  "protocol_version": "1.0",
+  "scope": "controlled tool-use IPI pilot; not full web auditing",
+  "origin": "local-authored-v1",
+  "phase": "design; no real attempts executed",
+  "planned_cases": 24,
+  "planned_attempts": 144,
+  "repetitions": 3,
+  "files": {
+    "cases.json": "9d55835dfdcc42f6196f0aaa7ddb3c1ab15e429c2e4703f76f0db74a24f63073",
+    "schedule.json": "2fa45093b314b1e356e4190afa3c0e98e138a8b04c3cb4feeab34bb5c2e08977",
+    "config.json": "e7353836f5b307360562777ec6978929cedb348dc07dfaaa0f8e8610c8932615",
+    "Protocolo_v1.txt": "a47d22037a693f658f87171bd20d73bf1962b07c8201c7b03eacf3126b03c883"
+  }
+}
