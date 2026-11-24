@@ -3,9 +3,6 @@
 Sistema de agentes autónomos basados en modelos de lenguaje con **Capa de Procedencia** (*data provenance*) para automatizar auditorías de ciberseguridad web sin perder capacidad diagnóstica frente a ataques de inyección indirecta de prompts.
 
 **Tesis:** *Implementación de un sistema de agentes autónomos resistente a inyección de prompts para la automatización de auditorías de ciberseguridad web en el sector comercial, Perú, 2026*
-**Autores:** Grupo de investigación · Grupo de investigación
-**Asesor:** Mg. Lic. Fernando Alex Sierra Liñán
-**Universidad:** Universidad Privada del Norte (UPN) — Taller de Tesis 2
 
 ---
 
